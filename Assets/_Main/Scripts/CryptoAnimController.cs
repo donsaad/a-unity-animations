@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -8,24 +6,28 @@ public class CryptoAnimController : MonoBehaviour
     [SerializeField]
     Animator animator;
     [SerializeField]
-    Transform target;
-    //  [SerializeField]
-    // TwoBoneIKConstraint IK;
+    Transform mouseTarget;
     [SerializeField]
     Rig headRig;
     [SerializeField]
     Rig chestRig;
+    [SerializeField]
+    Rig rightArmRig;
+    [SerializeField]
+    Rig leftArmRig;
 
     Vector3 mousePosition;
     bool isLookingAtEthan = false;
     void Update()
     {
-        mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y,
-            Mathf.Abs(transform.position.z * 2))); // target is always in front of character unless it rotates using animation
-        target.position = mousePosition;
-
+        if (isLookingAtEthan)
+        {
+            mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y,
+              transform.position.z * 2));
+           //mouseTarget.position = mousePosition;
+            mouseTarget.position = new Vector3(-mousePosition.x, -mousePosition.y, Mathf.Abs(mousePosition.z));
+        }
         CheckInput();
-
     }
 
     void CheckInput()
@@ -36,11 +38,15 @@ public class CryptoAnimController : MonoBehaviour
             {
                 headRig.weight = 0;
                 chestRig.weight = 0;
+                rightArmRig.weight = 0;
+                leftArmRig.weight = 0;
             }
             else
             {
                 headRig.weight = 1;
                 chestRig.weight = 1;
+                rightArmRig.weight = 1;
+                leftArmRig.weight = 1;
             }
             isLookingAtEthan = !isLookingAtEthan;
         }
