@@ -9,17 +9,41 @@ public class CryptoAnimController : MonoBehaviour
     Animator animator;
     [SerializeField]
     Transform target;
-  //  [SerializeField]
-   // TwoBoneIKConstraint IK;
+    //  [SerializeField]
+    // TwoBoneIKConstraint IK;
+    [SerializeField]
+    Rig headRig;
+    [SerializeField]
+    Rig chestRig;
 
     Vector3 mousePosition;
-
+    bool isLookingAtEthan = false;
     void Update()
     {
-        mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 
+        mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y,
             Mathf.Abs(transform.position.z * 2))); // target is always in front of character unless it rotates using animation
         target.position = mousePosition;
-        
+
+        CheckInput();
+
+    }
+
+    void CheckInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (isLookingAtEthan)
+            {
+                headRig.weight = 0;
+                chestRig.weight = 0;
+            }
+            else
+            {
+                headRig.weight = 1;
+                chestRig.weight = 1;
+            }
+            isLookingAtEthan = !isLookingAtEthan;
+        }
         if (Input.GetKeyDown(KeyCode.F))
         {
             animator.SetTrigger("Kick");
@@ -57,6 +81,5 @@ public class CryptoAnimController : MonoBehaviour
         {
             animator.SetFloat("Turn", 0);
         }
-
     }
 }
